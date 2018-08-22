@@ -15,6 +15,8 @@
     "axios": "^0.18.0",
     "element-ui": "^2.4.6",
     "vue": "^2.5.2",
+    "vue-canvas-nest": "^1.2.5",
+    "vue-echarts": "^3.0.9",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
