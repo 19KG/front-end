@@ -20,7 +20,7 @@
           </div>
           <div class="movie-detail-area">
             <span class="movie-detail-title">导演</span>
-            <span>{{movie.directors}}</span>
+            <span>{{directors}}</span>
           </div>
           <div class="movie-detail-area">
             <span class="movie-detail-title">主演</span>
@@ -34,7 +34,16 @@
           <span class="summary-title">简介</span>
         </div>
         <p class="summary-content">{{movie.summary}}</p>
-        <charts :options="polar"></charts>
+        <div class="summary-title-area">
+          <div class="square"></div>
+          <span class="summary-title">推荐理由</span>
+        </div>
+        <p class="summary-content">{{movie.explanation}}</p>
+        <div class="summary-title-area">
+          <div class="square"></div>
+          <span class="summary-title">可视化</span>
+        </div>
+        <charts :options="graphData"></charts>
       </div>
     </div>
   </el-dialog>
@@ -48,14 +57,6 @@
   export default {
     name: "DetailPage",
     data() {
-      let com = []
-
-      for (let i = 0; i <= 360; i++) {
-        let t = i / 180 * Math.PI
-        let r = Math.sin(2 * t) * Math.cos(2 * t)
-        com.push([r, i])
-      }
-
       return {
         movie: {
           country: '',
@@ -68,9 +69,33 @@
           subtype: '',
           summary: '',
           title: '',
-          year: ''
+          year: '',
+          explanation: '',
+          entity_data: [
+            {
+              name: '1'
+            },
+            {
+              name: '2'
+            },
+            {
+              name: '3'
+            }
+          ],
+          relation: [
+            {
+              name: '1',
+              source: '1',
+              target: '2'
+            },
+            {
+              name: '2',
+              source: '2',
+              target: '3'
+            }
+          ]
         },
-        polar: {
+        graphData: {
           tooltip: {},
           animation: true,
           series : [
@@ -108,7 +133,7 @@
               ],
               force: {
                 repulsion: 1000,
-                edgeLength: 150
+                edgeLength: 120
               },
               itemStyle: {
                 color: '#409EFF'
@@ -135,11 +160,17 @@
       },
       starring: function () {
         return this.movie.starring.replace(new RegExp(',', 'g'), ' \\ ')
+      },
+      directors: function() {
+        return this.movie.directors.replace(new RegExp(',', 'g'), ' \\ ')
       }
     },
     methods: {
       updateMovie() {
         this.movie = JSON.parse(JSON.stringify(this.movieDetail))
+        this.graphData.series[0].data = this.movie.entity_data
+        this.graphData.series[0].links = this.movie.relation
+        console.log(this.movie)
       },
       handleClose(done) {
         this.$emit('update:detailDialogOpen', false)
@@ -175,7 +206,7 @@
   .movie-detail-area {
     display: flex;
     color: dimgray;
-    line-height: 18px;
+    line-height: 20px;
     margin-top: 12px;
     font-size: 16px;
   }
