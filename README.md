@@ -1,8 +1,8 @@
-# recommendation
+# NTFKG Front-end
 
-> The front-end of recomendation
+> The front-end of NTFKG
 
-## Build Setup
+## 配置
 
 ``` bash
 # install dependencies
